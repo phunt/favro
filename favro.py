@@ -57,11 +57,7 @@ def generate_record():
     record_count += 1
     fields = []
     for i in xrange(random.randint(0, 10)):
-        if random.randint(0, 1) == 0:
-            type = random_primitive_type()
-        else:
-            type = generate_union()
-        fields.append({'name':'f%d'%i, 'type':type})
+        fields.append({'name':'f%d'%i, 'type':random_type()})
     return {'type':'record', 'name':name, 'fields':fields}
 
 enum_count = 0
@@ -85,8 +81,11 @@ def generate_union():
     # fixme
     result = {}
     for e in union:
-        result[e] = 1
-    return result.keys()
+        if type(e) == dict:
+            result[e['type']] = e
+        else:
+            result[e] = e
+    return result.values()
 
 fixed_count = 0
 def generate_fixed():
