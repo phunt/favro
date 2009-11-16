@@ -42,7 +42,7 @@ primitive_types = ('string', 'bytes', 'int', 'long', 'float', 'double',
                    'boolean', 'null')
 
 def random_primitive_type():
-    type = primitive_types[random.randint(0, 7)]
+    type = primitive_types[random.randint(0, len(primitive_types) - 1)]
     form = random.randint(0, 1)
     if form == 0:
         return type
@@ -56,7 +56,7 @@ def generate_record():
     name = "Record_%d" % record_count
     record_count += 1
     fields = []
-    for i in xrange(random.randint(0, 10)):
+    for i in xrange(random.randint(0, 7)):
         fields.append({'name':'f%d'%i, 'type':random_type()})
     return {'type':'record', 'name':name, 'fields':fields}
 
@@ -70,10 +70,10 @@ def generate_enum():
     return {'type':'enum', 'name':name, 'symbols':symbols}
 
 def generate_array():
-    return {'type':'array', 'items':random_primitive_type()}
+    return {'type':'array', 'items':random_type()}
 
 def generate_map():
-    return {'type':'map', 'values':random_primitive_type()}
+    return {'type':'map', 'values':random_type()}
 
 def generate_union():
     union =  [random_primitive_type() for i in xrange(random.randint(0, 5))]
@@ -116,14 +116,14 @@ class FSchema(object):
 
     def gen_messages(self):
         self.messages = {}
-        for i in xrange(random.randint(0, 25)):
+        for i in xrange(random.randint(0, 20)):
             name = "M%d" % i
             self.messages[name] = self.gen_message()
 
     def gen_message(self):
         message = {}
         request = []
-        for i in xrange(random.randint(0, 10)):
+        for i in xrange(random.randint(0, 7)):
             param = "p%d" % i
             request.append({'name':param, 'type':random_type()})
         message['request'] = request
